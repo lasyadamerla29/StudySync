@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Create account · StudySync{% endblock %}
+{% block content %}
+<div class="auth-wrap"><div class="auth-card">
+  <div class="brand-mark">S</div><p class="eyebrow">START YOUR JOURNEY</p><h1 class="h3 fw-bold">Create your account.</h1><p class="text-muted mb-4">One small step toward a more focused you.</p>
+  <form method="post">{% csrf_token %}
+    {% for field in form %}<div class="mb-3"><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<div class="form-text">{{ field.help_text|safe }}</div>{% endif %}{% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}</div>{% endfor %}
+    <button class="btn btn-primary w-100 py-2">Create account</button>
+  </form><p class="mt-4 mb-0 text-center text-muted">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+</div></div>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}{{ heading }} · StudySync{% endblock %}
+{% block content %}
+<div class="form-page"><a class="back-link" href="{% url cancel_url %}">← Back</a><section class="content-card mt-3"><p class="eyebrow">MAKE IT HAPPEN</p><h1 class="h3 fw-bold mb-4">{{ heading }}</h1><form method="post">{% csrf_token %}{% include 'tracker/form_fields.html' with form=form %}<div class="d-flex gap-2 mt-4"><button class="btn btn-primary">Save</button><a class="btn btn-light" href="{% url cancel_url %}">Cancel</a></div></form></section></div>
+{% endblock %}

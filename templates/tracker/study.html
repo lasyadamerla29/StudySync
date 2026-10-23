@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}Study log · StudySync{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">TIME WELL SPENT</p><h1 class="h2 fw-bold">Study log</h1><p class="text-muted">Record your focused study sessions.</p></div><div class="summary-chip"><span>Total recorded</span><strong>{{ total_hours }} hours</strong></div></div>
+<div class="row g-4"><div class="col-lg-5"><section class="content-card"><h2 class="h5 fw-bold mb-3">Log a session</h2><form method="post">{% csrf_token %}{% include 'tracker/form_fields.html' with form=form %}<button class="btn btn-primary w-100 mt-3">Save session</button></form></section></div><div class="col-lg-7"><section class="content-card"><h2 class="h5 fw-bold mb-3">Recent sessions</h2>{% for session in sessions %}<div class="list-row"><div><strong>{{ session.subject }}</strong><div class="small text-muted">{{ session.studied_on|date:"D, d M Y" }}{% if session.notes %} · {{ session.notes }}{% endif %}</div></div><span class="minutes-pill">{{ session.minutes }} min</span></div>{% empty %}<p class="empty-state">Your study sessions will appear here.</p>{% endfor %}</section></div></div>
+{% endblock %}

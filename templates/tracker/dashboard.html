@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard · StudySync{% endblock %}
+{% block content %}
+<div class="hero-panel mb-4"><div><p class="eyebrow">YOUR PERSONAL WORKSPACE</p><h1 class="display-6 fw-bold">Good to see you, {{ user.username }}.</h1><p class="mb-0 hero-sub">A little progress every day adds up. Here's your snapshot for {{ today|date:"D, d M" }}.</p></div><div class="hero-icon">✦</div></div>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-xl-3"><div class="stat-card"><span class="stat-icon">✓</span><p>Pending tasks</p><h2>{{ pending_count }}</h2><small>Still on your list</small></div></div>
+  <div class="col-6 col-xl-3"><div class="stat-card"><span class="stat-icon">◷</span><p>Study this week</p><h2>{{ week_hours }} <small>hrs</small></h2><small>{{ week_sessions }} sessions logged</small></div></div>
+  <div class="col-6 col-xl-3"><div class="stat-card"><span class="stat-icon">✿</span><p>Habits today</p><h2>{{ habit_done }}/{{ habit_total }}</h2><small>Keep your rhythm going</small></div></div>
+  <div class="col-6 col-xl-3"><div class="stat-card"><span class="stat-icon">★</span><p>Tasks finished</p><h2>{{ completed_count }}</h2><small>Every finish counts</small></div></div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-6"><section class="content-card h-100"><div class="section-head"><div><p class="eyebrow">DAILY ROUTINE</p><h2 class="h5 fw-bold">Today's habits</h2></div><a href="{% url 'habits' %}" class="text-link">All habits →</a></div>
+    {% for habit in habits %}<div class="list-row"><div><strong>{{ habit.name }}</strong>{% if habit.description %}<div class="small text-muted">{{ habit.description }}</div>{% endif %}</div><form method="post" action="{% url 'habit_toggle' habit.id %}">{% csrf_token %}<input type="hidden" name="next" value="dashboard"><button class="btn btn-sm {% if habit.id in completed_habit_ids %}btn-success{% else %}btn-outline-primary{% endif %}">{% if habit.id in completed_habit_ids %}✓ Done{% else %}Mark done{% endif %}</button></form></div>{% empty %}<p class="empty-state">No habits yet. Add one small routine to get started.</p><a class="btn btn-primary btn-sm" href="{% url 'habit_add' %}">Add your first habit</a>{% endfor %}
+  </section></div>
+  <div class="col-lg-6"><section class="content-card h-100"><div class="section-head"><div><p class="eyebrow">STAY ON TRACK</p><h2 class="h5 fw-bold">Your tasks</h2></div><a href="{% url 'tasks' %}" class="text-link">View all →</a></div>
+    {% for task in tasks %}<div class="list-row"><div><strong class="{% if task.completed %}task-done{% endif %}">{{ task.title }}</strong><div class="small text-muted">{% if task.due_date %}Due {{ task.due_date|date:"d M Y" }}{% else %}No deadline{% endif %} · {{ task.get_priority_display }} priority</div></div><span class="status-dot {% if task.completed %}done{% endif %}">{% if task.completed %}Done{% else %}Pending{% endif %}</span></div>{% empty %}<p class="empty-state">Your task list is clear. Add an assignment or goal.</p>{% endfor %}
+    <a href="{% url 'task_add' %}" class="btn btn-outline-primary btn-sm mt-3">+ Add task</a>
+  </section></div>
+</div>
+{% endblock %}
